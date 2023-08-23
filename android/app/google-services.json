@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "638222658911",
+    "firebase_url": "https://boatapp-136fc-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "boatapp-136fc",
+    "storage_bucket": "boatapp-136fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638222658911:android:6ea172a127d7de42915aea",
+        "android_client_info": {
+          "package_name": "com.zamir.boatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638222658911-op4cjbh50v3uk65a49844np2vpsrt3la.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHeioHe3HwxgY45j7NFCMmtuWgtYUImVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638222658911-op4cjbh50v3uk65a49844np2vpsrt3la.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
