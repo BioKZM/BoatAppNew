@@ -203,7 +203,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text(
-                  "İşaretçiyi Düzenle",
+                  "Yer İşaretini Düzenle",
                 ),
                 actions: [
                   Column(
@@ -216,7 +216,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.fromLTRB(2, -5, 0, 0),
                             border: OutlineInputBorder(),
-                            hintText: "Yer İşareti İsmi",
+                            hintText: "Yer işareti ismi",
                           ),
                         ),
                       ),
@@ -231,7 +231,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
                         decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(0),
                             border: OutlineInputBorder(),
-                            hintText: "Yer İşareti Hızı"),
+                            hintText: "Yer işareti hızı"),
                       )),
                     ],
                   ),
@@ -503,37 +503,51 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     // });
   }
 
-  void sendDataToDatabase(String name, Set<Marker> markers) async {
+  void sendDataToDatabase(Set<Marker> markers) async {
     CollectionReference data = _fireStore.collection('users');
     var userData = data.doc('${user!.email}');
+    DateTime today = DateTime.now();
+    String date = "${today.day}/${today.month}/${today.year}";
+    int x = 0;
     await _fireStore
         .collection('users')
         .doc(user!.email)
         .get()
         .then((value) async {
       Map<String, dynamic> mapOfMarkers = value['locationConfig'];
+      String name = "Rota ${mapOfMarkers.length + 1}";
       // List mapOfMarkers = value['locationConfig'];
       List<Map<String, dynamic>> markersData = [];
       // markers.remove(value)
       // markers = markers.toList();
       List<Marker> tempMarkers = markers.toList();
-      tempMarkers.removeAt(0);
+      // tempMarkers.removeAt(0);
       markers = tempMarkers.toSet();
       for (var marker in markers) {
-        markersData.add({
-          'routeName': name,
-          'markerId': marker.markerId.value,
-          // 'position': marker.position.toString(),
-          'lat': marker.position.latitude,
-          'lon': marker.position.longitude,
-          // 'icon': marker.icon,
-          // 'infoWindow': marker.infoWindow.toString(),
-          // 'onTap' : marker.onTap1i
-          // 'lat': marker.position.latitude,
-          // 'lon': marker.position.longitude,
-          'title': marker.infoWindow.title,
-          'snippet': marker.infoWindow.snippet,
-        });
+        if (x == 0) {
+          markersData.add(
+            {
+              'routeName': name,
+              'markerId': marker.markerId.value,
+              'lat': marker.position.latitude,
+              'lon': marker.position.longitude,
+              'title': marker.infoWindow.title,
+              'snippet': marker.infoWindow.snippet,
+              'date': date,
+            },
+          );
+          x += 1;
+        } else {
+          markersData.add(
+            {
+              'markerId': marker.markerId.value,
+              'lat': marker.position.latitude,
+              'lon': marker.position.longitude,
+              'title': marker.infoWindow.title,
+              'snippet': marker.infoWindow.snippet,
+            },
+          );
+        }
       }
       mapOfMarkers[name] = markersData;
       // mapOfMarkers.add(markersData);
@@ -585,7 +599,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
         ),
         onPressed: () {
           // sendDataWithBluetooth(_markers);
-          sendDataToDatabase("test2", _markers);
+          sendDataToDatabase(_markers);
           showConfirmationDialog();
           changeButtonType();
         },
@@ -606,20 +620,6 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
         stream: null,
         builder: (context, snapshot) {
           return Scaffold(
-            appBar: AppBar(
-              leading: Container(
-                padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.exit_to_app,
-                    color: Color(0xffb8095e),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/configs");
-                  },
-                ),
-              ),
-            ),
             body: Align(
               alignment: const AlignmentDirectional(0, -0.30),
               child: myLocation != null
